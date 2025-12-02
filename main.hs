@@ -17,7 +17,10 @@ main = do
         input02 <- ranges02 <$> readFile "input02.txt"
         putStrLn ">>> Day 2"
         print input02
-        let wrongIds = concatMap ranges02a input02
-        print wrongIds
-        print $ sum wrongIds
+        let invalidIds1 = concatMap (aoc02 1) $ filterEven02 input02
+        print invalidIds1
+        print $ sum invalidIds1
+        let invalidIds2 = concatMap (aoc02 2) input02
+        print invalidIds2
+        print $ sum invalidIds2
 
