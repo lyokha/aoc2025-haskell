@@ -11,7 +11,7 @@ ranges02 =
                     in map (\n ->
                                let nup = 10 ^ n - 1
                                    nbot = 10 ^ (n - 1)
-                               in ((min (max lv nbot) nup, min nup rv), n)
+                               in ((max lv nbot, min rv nup), n)
                            ) [length l .. length r']
                 _ -> undefined
          ) . break (== '-')
@@ -20,10 +20,11 @@ ranges02 =
 filterEven02 :: [[((Integer, Integer), Int)]] -> [[((Integer, Integer), Int)]]
 filterEven02 = filter (not . null) . map (filter (even . snd))
 
-generateInvalidIds :: Int -> Int -> [Integer]
-generateInvalidIds len n = 
-    map (\v -> let v' = show v in read $ take len $ cycle v')
-        [read @Integer ('1' : replicate (n - 1) '0') .. read (replicate n '9')]
+generateInvalidIds :: Integer -> Integer -> Int -> Int -> [Integer]
+generateInvalidIds _ _ 1 _ = []
+generateInvalidIds l r n grpLen =
+    map (read . take n . cycle . show) [takeHeadInteger l .. takeHeadInteger r]
+    where takeHeadInteger = read @Integer . take grpLen . show
 
 bigFactors :: Int -> [Int]
 bigFactors n = map ((n `div`) . NE.head) . NE.group $ primeFactors n
@@ -36,8 +37,8 @@ aoc02 :: Int -> [((Integer, Integer), Int)] -> [Integer]
 aoc02 part =
     foldr (\((l, r), n) ->
               (++ (foldr (mergeUnique
-                         . takeWhile (<= r) . dropWhile (< max l 11)
-                         . generateInvalidIds n
+                         . takeWhile (<= r) . dropWhile (< l)
+                         . generateInvalidIds l r n
                          ) [] $ factors part n
                   )
               )
