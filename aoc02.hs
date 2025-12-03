@@ -1,6 +1,5 @@
 module Aoc02 (ranges02, filterEven02, aoc02) where
 
-import Data.List
 import Data.List.NonEmpty qualified as NE
 
 ranges02 :: String -> [[((Integer, Integer), Int)]]
@@ -36,17 +35,22 @@ bigFactors n = map ((n `div`) . NE.head) . NE.group $ primeFactors n
 aoc02 :: Int -> [((Integer, Integer), Int)] -> [Integer]
 aoc02 part =
     foldr (\((l, r), n) ->
-              (++ (postProcess part $
-                      concatMap (filter (\v -> v >= max l 11 && v <= r)
-                                . generateInvalidIds n
-                                ) $ factors part n
+              (++ (foldr (mergeUnique
+                         . takeWhile (<= r) . dropWhile (< max l 11)
+                         . generateInvalidIds n
+                         ) [] $ factors part n
                   )
               )
           ) []
     where factors 1 = pure . (`div` 2)
           factors _ = bigFactors
-          postProcess 1 = id
-          -- nub is required for values such as 1111111111 that can be made
-          -- from different combinations such as 11111-11111 or 11-11-11-11-11
-          postProcess _ = nub
+          -- mergeUnique is required for values like 1111111111 which can be
+          -- made from combinations of different factors like 11111-11111
+          -- (factor 5) or 11-11-11-11-11 (factor 2)
+          mergeUnique [] ys = ys
+          mergeUnique xs [] = xs
+          mergeUnique xs'@(x : xs) ys'@(y : ys)
+              | y == x = mergeUnique xs' ys
+              | y < x = y : mergeUnique xs' ys
+              | otherwise = x : mergeUnique xs ys'
 
