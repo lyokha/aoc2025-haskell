@@ -6,6 +6,7 @@ import System.Environment
 import Aoc01
 import Aoc02
 import Aoc03
+import Aoc04
 
 main :: IO ()
 main = do
@@ -29,4 +30,8 @@ main = do
         putStrLn ">>> Day 3"
         print $ aoc03p1 input03
         print $ aoc03p2 input03
+    when (null args || "4" `elem` args) $ do
+        input04 <- readFile "input04.txt"
+        putStrLn ">>> Day 4"
+        print $ aoc04 input04
 
