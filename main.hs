@@ -33,5 +33,6 @@ main = do
     when (null args || "4" `elem` args) $ do
         input04 <- readFile "input04.txt"
         putStrLn ">>> Day 4"
-        print $ aoc04 input04
+        print $ aoc04p1 input04
+        print $ aoc04p2 input04
 
