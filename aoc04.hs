@@ -1,13 +1,12 @@
 module Aoc04 (aoc04p1, aoc04p2) where
 
-import Data.Array.IArray
+import Data.Array.Unboxed
 import Data.IntMap qualified as M
 import Data.IntMap (IntMap)
-import Data.Foldable
 import Data.Bifunctor
 import Data.List
 
-readGrid :: String -> Array Int (Array Int Char)
+readGrid :: String -> Array Int (UArray Int Char)
 readGrid input =
     let rows = lines input
         len = length rows
@@ -21,24 +20,19 @@ adjacentCells bound (x, y) =
         ,(x + 1, y - 1), (x + 1, y), (x + 1, y + 1)
         ]
 
-step :: Array Int (Array Int Char) -> (Integer, IntMap [Int])
-step grid = snd $
-    foldl (\(i, (k, is)) row ->
-              (i + 1
-              ,let next = snd $
-                       foldl (\(j, (l, a)) v ->
-                                 let accessible = accessibleRoll v i j
-                                 in (j + 1
-                                    ,(l + if accessible then 1 else 0
-                                     ,if accessible
-                                          then M.insertWith (++) i [j] a
-                                          else a
-                                     )
-                                    )
-                             ) (1, (0, M.empty)) row
-               in bimap (k +) (is `M.union`) next
-              )
-          ) (1, (0, M.empty)) grid
+step :: Array Int (UArray Int Char) -> (Integer, IntMap [Int])
+step grid =
+    foldl (\(k, is) (i, row) ->
+              bimap (k +) (is `M.union`) $
+                  foldl (\(l, a) (j, v) ->
+                            let accessible = accessibleRoll v i j
+                            in (l + if accessible then 1 else 0
+                               ,if accessible
+                                    then M.insertWith (++) i [j] a
+                                    else a
+                               )
+                        ) (0, M.empty) $ assocs row
+          ) (0, M.empty) $ assocs grid
     where len = snd $ bounds grid
           countAdjacentRolls i j =
               foldr (\(x, y) -> (+ if grid ! x ! y == '@' then 1 else 0)) 0 $
@@ -58,20 +52,19 @@ aoc04p2 input = fst $ silentHead $ dropWhile (not . fst . snd) $
               let (k, is) = step grid'
               in (n + k
                  ,(k == 0
-                  ,listArray (1, len) $ reverse $ snd $
-                      foldl (\(i, a) row ->
-                                (i + 1
-                                ,(: a) $ case M.lookup i is of
-                                             Just vs -> updateRow row vs
-                                             Nothing -> row
-                                )
-                            ) (1, []) grid'
+                  ,listArray (1, len) $
+                      foldr (\(i, row) ->
+                                (case M.lookup i is of
+                                     Just vs -> updateRow row vs
+                                     Nothing -> row
+                                :)
+                            ) [] $ assocs grid'
                   )
                  )
           ) (0, (False, grid)) [0 ..]
     where grid = readGrid input
           len = snd $ bounds grid
-          updateRow row vs = listArray (1, len) $ reverse $
-              foldl (\a (j, v) -> (if j `elem` vs then 'x' else v) : a)
-                  [] (zip [1 ..] $ toList row)
+          updateRow row vs = listArray (1, len) $
+              foldr (\(j, v) -> ((if j `elem` vs then 'x' else v) :)) [] $
+                  assocs row
 

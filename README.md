@@ -28,8 +28,8 @@ Benchmark 1: ./main 3
 
 $ hyperfine -w 2 -r 5 './main 4'
 Benchmark 1: ./main 4
-  Time (mean ± σ):     331.7 ms ±   4.3 ms    [User: 318.5 ms, System: 9.7 ms]
-  Range (min … max):   325.1 ms … 336.3 ms    5 runs
+  Time (mean ± σ):     262.3 ms ±   6.2 ms    [User: 249.1 ms, System: 11.1 ms]
+  Range (min … max):   251.3 ms … 266.9 ms    5 runs
 
 $ hyperfine -w 2 -r 5 './main 5'
 Benchmark 1: ./main 5

@@ -41,7 +41,7 @@ main = do
         putStrLn ">>> Day 5"
         let (ranges, values) = readInput05 input05
             mergedRanges = mergeRanges05 ranges
-        print $ mergeRanges05 ranges
+        print mergedRanges
         print $ aoc05p1 mergedRanges values
         print $ aoc05p2 mergedRanges
 
