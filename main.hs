@@ -8,6 +8,7 @@ import Aoc02
 import Aoc03
 import Aoc04
 import Aoc05
+import Aoc06
 
 main :: IO ()
 main = do
@@ -44,4 +45,9 @@ main = do
         print mergedRanges
         print $ aoc05p1 mergedRanges values
         print $ aoc05p2 mergedRanges
+    when (null args || "6" `elem` args) $ do
+        input06 <- readFile "input06.txt"
+        putStrLn ">>> Day 6"
+        print $ aoc06p1 input06
+        print $ aoc06p2 input06
 
