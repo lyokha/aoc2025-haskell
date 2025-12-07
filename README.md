@@ -43,7 +43,7 @@ Benchmark 1: ./main 6
 
 $ hyperfine -w 2 -r 5 './main 7'
 Benchmark 1: ./main 7
-  Time (mean ± σ):      16.4 ms ±   0.8 ms    [User: 13.7 ms, System: 2.7 ms]
-  Range (min … max):    15.2 ms …  17.3 ms    5 runs
+  Time (mean ± σ):      14.3 ms ±   1.7 ms    [User: 13.3 ms, System: 1.0 ms]
+  Range (min … max):    12.9 ms …  16.4 ms    5 runs
 ```
 
