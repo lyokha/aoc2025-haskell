@@ -36,9 +36,9 @@ aoc06p2 =
            . (\(h, t) -> (pure $ silentHead h, map reverse $ silentTail h : t))
            . fromJust . uncons
           )
-    . groupBy (const $ (not . opChar) . silentHead)
-    . filter (any (/= ' '))
+    . groupBy (const $ not . opChar . silentHead)
     . map reverse
+    . filter (any (/= ' '))
     . transpose
     . lines
 

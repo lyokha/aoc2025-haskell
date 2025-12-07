@@ -9,6 +9,7 @@ import Aoc03
 import Aoc04
 import Aoc05
 import Aoc06
+import Aoc07
 
 main :: IO ()
 main = do
@@ -50,4 +51,13 @@ main = do
         putStrLn ">>> Day 6"
         print $ aoc06p1 input06
         print $ aoc06p2 input06
+    when (null args || "7" `elem` args) $ do
+        input07 <- readFile "input07.txt"
+        putStrLn ">>> Day 7"
+        let ps@(pbeam, ptach) = readInput07 input07
+            scans = scanTopDown07 pbeam ptach
+        print ps
+        print scans
+        print $ fst $ last scans
+        print $ aoc07p2 $ map snd scans
 
