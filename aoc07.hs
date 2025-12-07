@@ -4,8 +4,6 @@ import Data.List
 import Data.List.NonEmpty qualified as NE
 import Data.Maybe
 import Data.Bifunctor
-import GHC.IO (unsafePerformIO)
-import System.Environment
 
 readInput07 :: String -> (Int, [[Int]])
 readInput07 =
@@ -25,29 +23,35 @@ scanTopDown07 p =
               in (n + length is, (sort $ pbeam `union` nbeam \\ is, is))
           ) (0, ([p], []))
 
-memo ::(Int -> Int -> a) -> [[a]]
-memo f = map (\x -> map (f x) [0..]) [0..]
-
-vsS = map snd . uncurry scanTopDown07 . readInput07 $ unsafePerformIO (readFile "input07.txt")
-
-go :: Int -> Int -> Integer
-go n t
-    | n == len - 1 = 2
-    | otherwise = if (t - 1) `elem` (map fst vsS !! (n + 0))
-                         then fastgo (n + 1) (t - 1)
-                         else 0
-                  + (if (t + 1) `elem` (map fst vsS !! (n + 0))
-                          then fastgo (n + 1) (t + 1)
-                          else 0)
-    where len = length vsS
-
-gostore :: [[Integer]]
-gostore = memo go
-
-fastgo :: Int -> Int -> Integer
-fastgo x y = gostore !! x !! y
+memo2d :: (Int -> Int -> a) -> [[a]]
+memo2d f = map (\x -> map (f x) [0..]) [0..]
 
 aoc07p2 :: [([Int], [Int])] -> Integer
-aoc07p2 vs@(_ : (ps, [t0]) : _) = go 0 t0
+-- expect the upper tachyon at line 2 (modulo lines free of tachyons)
+aoc07p2 vs@(_ : (_, [t0]) : _) = go 1 t0
+    where go n t
+              | n == len = 0
+              | otherwise = let (nl, nr) = (snd $ ptachNext (n + 1) $ t - 1
+                                           ,snd $ ptachNext (n + 1) $ t + 1
+                                           )
+                            in case nl of
+                                   Just nl' -> fastgo nl' $ t - 1
+                                   Nothing -> 1
+                               +
+                               case nr of
+                                    Just nr' -> fastgo nr' $ t + 1
+                                    Nothing -> 1
+          ptach = map snd vs
+          len = length ptach
+          ptachNext nk nn =
+              foldl (\(k', n') ptach' ->
+                        case n' of
+                            Nothing -> if nn `elem` ptach'
+                                           then (k', Just k')
+                                           else (k' + 1, Nothing)
+                            n'' -> (k' + 1, n'')
+                    ) (nk, Nothing) $ drop nk ptach
+          gostore = memo2d go
+          fastgo x y = gostore !! x !! y
 aoc07p2 _ = undefined
 

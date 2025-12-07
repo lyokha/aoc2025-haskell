@@ -61,7 +61,7 @@ aoc04p2 input = fst $ silentHead $ dropWhile (not . fst . snd) $
                             ) [] $ assocs grid'
                   )
                  )
-          ) (0, (False, grid)) [0 ..]
+          ) (0, (False, grid)) [0 :: Int ..]
     where grid = readGrid input
           len = snd $ bounds grid
           updateRow row vs = listArray (1, len) $
