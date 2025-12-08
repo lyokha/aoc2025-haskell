@@ -1,0 +1,27 @@
+name:                       aoc2025-haskell
+version:                    0.0.0.1
+synopsis:                   My solutions for Advent of Code 2025
+homepage:                   https://github.com/lyokha/aoc2025-haskell
+license:                    BSD3
+license-file:               LICENSE
+author:                     Alexey Radkov <alexey.radkov@gmail.com>
+maintainer:                 Alexey Radkov <alexey.radkov@gmail.com>
+stability:                  experimental
+copyright:                  2025 Alexey Radkov
+category:                   Education
+build-type:                 Simple
+cabal-version:              1.20
+
+executable aoc2025
+  default-language:         GHC2021
+  build-depends:            base >= 4.10 && < 5
+                          , containers
+                          , array
+                          , disjoint-containers
+
+  main-is:                  main.hs
+  other-modules:            Aoc01 Aoc02 Aoc03 Aoc04 Aoc05 Aoc06
+                            Aoc07 Aoc08
+
+  ghc-options:             -Wall
+

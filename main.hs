@@ -64,5 +64,6 @@ main = do
     when (null args || "8" `elem` args) $ do
         input <- readInput08 . lines <$> readFile "input08.txt"
         print input
-        print $ take 1000 $ sortByDistance07 input
+        print $ aoc08p1 1000 3 input
+        print $ aoc08p2 input
 

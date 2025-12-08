@@ -37,7 +37,7 @@ step grid =
           countAdjacentRolls i j =
               foldr (\(x, y) -> (+ if grid ! x ! y == '@' then 1 else 0)) 0 $
                   adjacentCells len (i, j)
-          accessibleRoll '@' = ((< 4) .) . countAdjacentRolls
+          accessibleRoll '@' = ((< (4 :: Int)) .) . countAdjacentRolls
           accessibleRoll _ = const $ const False
 
 aoc04p1 :: String -> Integer

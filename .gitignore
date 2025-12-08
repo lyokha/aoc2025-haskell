@@ -1,6 +1,4 @@
-*.hi
-*.o
-main
+/dist-newstyle/
 
 input*.txt
 tags

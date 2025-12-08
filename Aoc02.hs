@@ -28,10 +28,10 @@ generateInvalidIds l r n grpLen =
 
 bigFactors :: Int -> [Int]
 bigFactors n = map ((n `div`) . NE.head) . NE.group $ primeFactors n
-    where primeFactors n
-              | [] <- factors = [n]
-              | fs@(h : _) <- factors = fs ++ primeFactors (n `div` h)
-              where factors = take 1 $ filter ((0 ==) . (n `mod`)) [2 .. n - 1]
+    where primeFactors k
+              | [] <- factors = [k]
+              | fs@(h : _) <- factors = fs ++ primeFactors (k `div` h)
+              where factors = take 1 $ filter ((0 ==) . (k `mod`)) [2 .. k - 1]
 
 aoc02 :: Int -> [((Integer, Integer), Int)] -> [Integer]
 aoc02 part =

@@ -7,43 +7,48 @@ with the original inputs appointed from the Advent of Code.
 ```ShellSession
 $ ghc --version
 The Glorious Glasgow Haskell Compilation System, version 9.12.2
-$ ghc -O --make main.hs aoc*.hs
+$ cabal build
 ```
 
 ```ShellSession
-$ hyperfine -w 2 -r 5 './main 1'
-Benchmark 1: ./main 1
-  Time (mean ± σ):      13.8 ms ±   1.2 ms    [User: 9.7 ms, System: 4.1 ms]
-  Range (min … max):    12.4 ms …  15.1 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 1"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      15.2 ms ±   1.2 ms    [User: 9.1 ms, System: 5.8 ms]
+  Range (min … max):    13.6 ms …  16.8 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 2'
-Benchmark 1: ./main 2
-  Time (mean ± σ):       7.4 ms ±   0.7 ms    [User: 3.8 ms, System: 3.5 ms]
-  Range (min … max):     6.5 ms …   8.0 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 2"
+Benchmark 1: aoc2025
+  Time (mean ± σ):       7.4 ms ±   0.5 ms    [User: 3.6 ms, System: 3.7 ms]
+  Range (min … max):     6.8 ms …   8.0 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 3'
-Benchmark 1: ./main 3
-  Time (mean ± σ):       9.0 ms ±   2.1 ms    [User: 7.4 ms, System: 1.9 ms]
-  Range (min … max):     5.8 ms …  11.6 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 3"
+Benchmark 1: aoc2025
+  Time (mean ± σ):       9.3 ms ±   0.4 ms    [User: 4.5 ms, System: 4.7 ms]
+  Range (min … max):     8.8 ms …   9.6 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 4'
-Benchmark 1: ./main 4
-  Time (mean ± σ):     262.3 ms ±   6.2 ms    [User: 249.1 ms, System: 11.1 ms]
-  Range (min … max):   251.3 ms … 266.9 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 4"
+Benchmark 1: aoc2025
+  Time (mean ± σ):     216.0 ms ±   8.5 ms    [User: 204.0 ms, System: 9.9 ms]
+  Range (min … max):   207.1 ms … 227.0 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 5'
-Benchmark 1: ./main 5
-  Time (mean ± σ):      12.0 ms ±   2.2 ms    [User: 8.3 ms, System: 3.6 ms]
-  Range (min … max):     9.8 ms …  15.6 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 5"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      10.4 ms ±   0.6 ms    [User: 6.7 ms, System: 3.6 ms]
+  Range (min … max):     9.8 ms …  11.5 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 6'
-Benchmark 1: ./main 6
-  Time (mean ± σ):      17.5 ms ±   1.7 ms    [User: 14.5 ms, System: 2.9 ms]
-  Range (min … max):    15.9 ms …  19.8 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 6"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      19.0 ms ±   1.7 ms    [User: 13.4 ms, System: 5.4 ms]
+  Range (min … max):    17.3 ms …  21.8 ms    5 runs
 
-$ hyperfine -w 2 -r 5 './main 7'
-Benchmark 1: ./main 7
-  Time (mean ± σ):      14.3 ms ±   1.7 ms    [User: 13.3 ms, System: 1.0 ms]
-  Range (min … max):    12.9 ms …  16.4 ms    5 runs
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 7"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      17.4 ms ±   1.0 ms    [User: 12.6 ms, System: 4.5 ms]
+  Range (min … max):    16.0 ms …  18.3 ms    5 runs
+
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 8"
+Benchmark 1: aoc2025
+  Time (mean ± σ):     315.1 ms ±   5.9 ms    [User: 278.1 ms, System: 32.6 ms]
+  Range (min … max):   305.4 ms … 320.4 ms    5 runs
 ```
 

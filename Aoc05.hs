@@ -16,13 +16,13 @@ readInput05 =
 
 mergeRanges05 :: [(Integer, Integer)] -> [(Integer, Integer)]
 mergeRanges05 vs
-    | (h : t) <- sort vs = (\(v, vs) -> vs ++ pure v) $
-        foldl (\ca@(a@(l, r), vs) v@(vl, vr) ->
+    | (h : t) <- sort vs = (\(v, vs') -> vs' ++ pure v) $
+        foldl (\ca@(a@(l, r), vs') v@(vl, vr) ->
                   if vl > r
-                      then (v, vs ++ pure a)
+                      then (v, vs' ++ pure a)
                       else if vr <= r
                                then ca
-                               else ((l, vr), vs)
+                               else ((l, vr), vs')
               ) (h, []) t
     | otherwise = []
 
