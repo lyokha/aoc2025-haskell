@@ -10,6 +10,7 @@ import Aoc04
 import Aoc05
 import Aoc06
 import Aoc07
+import Aoc08
 
 main :: IO ()
 main = do
@@ -60,4 +61,8 @@ main = do
         print scans
         print $ fst $ last scans
         print $ aoc07p2 $ map snd scans
+    when (null args || "8" `elem` args) $ do
+        input <- readInput08 . lines <$> readFile "input08.txt"
+        print input
+        print $ take 1000 $ sortByDistance07 input
 
