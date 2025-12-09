@@ -11,6 +11,7 @@ import Aoc05
 import Aoc06
 import Aoc07
 import Aoc08
+import Aoc09
 
 main :: IO ()
 main = do
@@ -66,4 +67,8 @@ main = do
         print input
         print $ aoc08p1 1000 3 input
         print $ aoc08p2 input
+    when (null args || "9" `elem` args) $ do
+        input <- readInput09 . lines <$> readFile "input09.txt"
+        print input
+        print $ aoc09p1 input
 

@@ -21,7 +21,7 @@ executable aoc2025
 
   main-is:                  main.hs
   other-modules:            Aoc01 Aoc02 Aoc03 Aoc04 Aoc05 Aoc06
-                            Aoc07 Aoc08
+                            Aoc07 Aoc08 Aoc09
 
   ghc-options:             -Wall
 
