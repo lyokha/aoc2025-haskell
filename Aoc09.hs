@@ -1,7 +1,6 @@
-module Aoc09 (readInput09, buildPoints09, aoc09p1, aoc09p2, aoc09p1a) where
+module Aoc09 (readInput09, aoc09p1, aoc09p2) where
 
 import Data.List
-import Data.IntMap qualified as M
 import Data.Bifunctor
 import Data.Function
 
@@ -41,41 +40,25 @@ aoc09p1 =
           shrink a@[_] = a
           shrink (a : bs) = [a, last bs]
 
-aoc09p1a ps =
-    take 500 $ filter even $
-    map (\(i, (_, y1), (x1, y2), (x2, _)) ->
-            if any (\(x, y) -> x > min x1 x2 && x < max x1 x2 && y > min y1 y2 && y < max y1 y2) ps
-                then 0
-                else (1 + abs (x1 - x2)) * (1 + abs (y1 - y2))
-        ) $ zip4 [0 :: Int ..] ps' (tail ps') (tail (tail ps'))
-    where ps' = cycle ps
+minmax :: Ord a => a -> a -> (a, a)
+minmax a b | a < b = (a, b)
+           | otherwise = (b, a)
 
-type Points = [(Int, (Point, ([(Int, Point)], [(Int, Point)])))]
-
-buildPoints09 :: [Point] -> Points
-buildPoints09 ps = M.toList $
-    M.foldlWithKey (\a i (py, psy'') ->
-                       M.insert i (py, (snd (psx' M.! i), psy'')) a
-                   ) M.empty $ build psy'
-    where pss = zip [1 :: Int ..] $ sort ps
-          psx = groupBy ((==) `on` (fst . snd)) pss
-          psx' = build psx
-          psy = sortBy (compare `on` (snd . snd)) pss
-          psy' = groupBy ((==) `on` (snd . snd)) psy
-          build =
-              M.fromListWith (\(p, ps') (_, ps'') -> (p, ps' ++ ps''))
-              . map (\((i, p), ps') -> (i, (p, ps')))
-              . concatMap (\ps' -> [(a, b) | a <- ps', let b = delete a ps'])
-
-aoc09p2 :: [Point] -> (Int, (Int, (Point, ([(Int, Point)], [(Int, Point)]))))
-aoc09p2 = foldr (\v a@(m, _) -> let n = maxArea v in if n > m then (n, v) else a) (0, (0, ((0, 0), ([], [])))) . buildPoints09
-    where maxArea (_, (_, ([], []))) = 1
-          maxArea (_, ((_, y), (px, []))) =
-              maximum $ map ((1 +) . abs . (`subtract` y) . snd . snd) px
-          maxArea (_, ((x, _), ([], py))) =
-              maximum $ map ((1 +) . abs . (`subtract` x) . fst . snd) py
-          maxArea (_, ((x, y), (px, py))) =
-              maximum (map ((1 +) . abs . (`subtract` y) . snd . snd) px)
-              *
-              maximum (map ((1 +) . abs . (`subtract` x) . fst . snd) py)
+-- still gives a wrong answer
+aoc09p2 :: [Point] -> [Int]
+aoc09p2 ps =
+    map (\((x1, y1), (x, y), (x2, y2)) ->
+            let ((xmin, xmax), (ymin, ymax)) =
+                    if x == x1
+                        then (minmax x x2, minmax y y1)
+                        else (minmax x x1, minmax y y2)
+                xs = takeWhile ((<= xmax) . fst) $
+                    dropWhile ((< xmin) . fst) pss
+                psc = filter (\(_, py) -> py >= ymin && py <= ymax) xs
+            in foldr (\(px, py) ->
+                         max ((abs (px - x) + 1) * (abs (py - y) + 1))
+                     ) 0 psc
+        ) $ zip3 ps psn $ silentTail psn
+    where psn = silentTail $ cycle ps
+          pss = sort ps
 

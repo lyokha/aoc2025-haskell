@@ -2,7 +2,6 @@ module Main where
 
 import Control.Monad
 import System.Environment
-import Data.List
 
 import Aoc01
 import Aoc02
@@ -72,7 +71,7 @@ main = do
         input <- readInput09 . lines <$> readFile "input09.txt"
         print input
         print $ aoc09p1 input
-        print $ buildPoints09 input
-        print $ aoc09p2 input
-        print $ map head $ group $ sort $ aoc09p1a input
+        let points = aoc09p2 input
+        print points
+        print $ maximum points
 
