@@ -13,6 +13,7 @@ import Aoc07
 import Aoc08
 import Aoc09
 import Aoc10
+import Aoc11
 
 main :: IO ()
 main = do
@@ -77,5 +78,13 @@ main = do
         print $ maximum points
     when (null args || "10" `elem` args) $ do
         input <- readInput10 <$> readFile "input10.txt"
-        print $ sum $ map (uncurry aoc10p1) input
+        print input
+        print $ sum $ map (uncurry aoc10p1 . fst) input
+        let input' = map (\((_, bs), jolt) -> (jolt, bs)) input
+        print $ sum $ map (uncurry aoc10p2) $ take 1 input'
+    when (null args || "11" `elem` args) $ do
+        input <- readInput11 <$> readFile "input11.txt"
+        print input
+        print $ aoc11p1 "you" "out" input
+        print $ aoc11p2 "svr" "out" input
 
