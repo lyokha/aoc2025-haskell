@@ -12,6 +12,7 @@ import Aoc06
 import Aoc07
 import Aoc08
 import Aoc09
+import Aoc10
 
 main :: IO ()
 main = do
@@ -74,4 +75,7 @@ main = do
         let points = aoc09p2 input
         print points
         print $ maximum points
+    when (null args || "10" `elem` args) $ do
+        input <- readInput10 <$> readFile "input10.txt"
+        print $ sum $ map (uncurry aoc10p1) input
 
