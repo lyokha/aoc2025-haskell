@@ -19,6 +19,7 @@ aoc11p1 start end m = go start [start]
               | otherwise = sum $ map (\c -> go c (c : ps)) (m ! n)
           go _ [] = undefined
 
+-- TODO: implement restriction on paths how it's stated in the original task
 aoc11p2 :: String -> String -> Map String [String] -> Integer
 aoc11p2 start end m = runST $ do
     memo <- newSTRef M.empty
@@ -35,6 +36,6 @@ aoc11p2 start end m = runST $ do
                                             nv <- go c (c : ps) memo
                                             modifySTRef memo $ M.insert c nv
                                             return nv
-                            ) (m ! n)
+                               ) (m ! n)
           go _ [] _ = undefined
 

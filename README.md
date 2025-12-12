@@ -1,6 +1,21 @@
 My solution for the [Advent of Code 2025](https://adventofcode.com/2025) puzzles
 crafted with Haskell.
 
+| Day | Part 1 | Part 2 |
+|-----|--------|--------|
+| 1   | [x]    | [x]    |
+| 2   | [x]    | [x]    |
+| 3   | [x]    | [x]    |
+| 4   | [x]    | [x]    |
+| 5   | [x]    | [x]    |
+| 6   | [x]    | [x]    |
+| 7   | [x]    | [x]    |
+| 8   | [x]    | [x]    |
+| 9   | [x]    | [ ]    |
+| 10  | [x]    | [ ]    |
+| 11  | [x]    | [ ]    |
+| 12  | [ ]    | [ ]    |
+
 Benchmarks were taken on my *Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz* computer
 with the original inputs appointed from the Advent of Code.
 
