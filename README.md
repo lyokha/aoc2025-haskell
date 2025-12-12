@@ -1,20 +1,20 @@
 My solution for the [Advent of Code 2025](https://adventofcode.com/2025) puzzles
 crafted with Haskell.
 
-| Day | Part 1 | Part 2 |
-|-----|--------|--------|
-| 1   | [x]    | [x]    |
-| 2   | [x]    | [x]    |
-| 3   | [x]    | [x]    |
-| 4   | [x]    | [x]    |
-| 5   | [x]    | [x]    |
-| 6   | [x]    | [x]    |
-| 7   | [x]    | [x]    |
-| 8   | [x]    | [x]    |
-| 9   | [x]    | [ ]    |
-| 10  | [x]    | [ ]    |
-| 11  | [x]    | [ ]    |
-| 12  | [ ]    | [ ]    |
+| Day | Part 1                    | Part 2                    |
+|-----|---------------------------|---------------------------|
+| 1   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 2   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 3   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 4   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 5   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 6   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 7   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 8   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
+| 9   | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 10  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 11  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 12  | <ul><li>- [ ] </li></ul>    | <ul><li>- [ ] </li></ul>    |
 
 Benchmarks were taken on my *Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz* computer
 with the original inputs appointed from the Advent of Code.
