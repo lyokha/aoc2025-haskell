@@ -1,8 +1,10 @@
-module Aoc09 (readInput09, aoc09p1, aoc09p2) where
+module Aoc09 (readInput09, aoc09p1, yBounds09, aoc09p2) where
 
 import Data.List
 import Data.Bifunctor
 import Data.Function
+import Data.IntMap qualified as M
+import Data.IntMap ((!))
 
 type Point = (Int, Int)
 
@@ -14,7 +16,7 @@ readInput09 = map $ bimap read (read . silentTail) . break (== ',')
 
 area :: [Point] -> [Point] -> Int
 area [(ax, a1y)] [(bx, b1y)] =
-    (bx - ax + 1) * (b1y - a1y + 1)
+    (bx - ax + 1) * (abs (b1y - a1y) + 1)
 area [(ax, a1y), (_, a2y)] [(bx, b1y)] = max
     ((bx - ax + 1) * (abs (b1y - a1y) + 1))
     ((bx - ax + 1) * (abs (b1y - a2y) + 1))
@@ -31,7 +33,7 @@ area _ _ = undefined
 
 aoc09p1 :: [Point] -> Int
 aoc09p1 =
-    foldr (\(ps1, ps2) a -> let n = area ps1 ps2 in max a n) 0
+    foldr (max . uncurry area) 0
     . (\ps -> [(a, b) | (i, a) <- zip [0 :: Int ..] ps, b <- drop i ps])
     . map shrink
     . groupBy ((==) `on` fst)
@@ -40,25 +42,32 @@ aoc09p1 =
           shrink a@[_] = a
           shrink (a : bs) = [a, last bs]
 
-minmax :: Ord a => a -> a -> (a, a)
-minmax a b | a < b = (a, b)
-           | otherwise = (b, a)
+yBounds09 :: [Point] -> M.IntMap [Int]
+yBounds09 ps = foldr update psx psy
+    where psy = build $ sort $ map (\(x, y) -> (y, x)) ps
+          psx = M.fromList $ build $ sort ps
+          build = map pairs . groupBy ((==) `on` fst)
+          pairs vs@((x, _) : _) = (x ,) $ map snd vs
+          pairs [] = undefined
+          update (y, [x1, x2]) =
+              M.mapWithKey (\x ys -> if x < x1 || x > x2
+                                         then ys
+                                         else let ysn = y : ys
+                                              in [minimum ysn, maximum ysn]
+                           )
+          update _ = undefined
 
 -- still gives a wrong answer
-aoc09p2 :: [Point] -> [Int]
-aoc09p2 ps =
-    map (\((x1, y1), (x, y), (x2, y2)) ->
-            let ((xmin, xmax), (ymin, ymax)) =
-                    if x == x1
-                        then (minmax x x2, minmax y y1)
-                        else (minmax x x1, minmax y y2)
-                xs = takeWhile ((<= xmax) . fst) $
-                    dropWhile ((< xmin) . fst) pss
-                psc = filter (\(_, py) -> py >= ymin && py <= ymax) xs
-            in foldr (\(px, py) ->
-                         max ((abs (px - x) + 1) * (abs (py - y) + 1))
-                     ) 0 psc
-        ) $ zip3 ps psn $ silentTail psn
-    where psn = silentTail $ cycle ps
-          pss = sort ps
+aoc09p2 :: M.IntMap [Int] -> [Point] -> Int
+aoc09p2 bsy =
+    foldr (max . uncurry area) 0
+    . (\ps -> [([a], [b]) | (i, a@(ax, ay)) <- zip [0 :: Int ..] ps
+              ,b@(bx, by) <- drop i ps
+              ,inBounds by $ bsy ! ax
+              ,inBounds ay $ bsy ! bx
+              ]
+      )
+    . sort
+    where inBounds y [y1, y2] = y >= y1 && y <= y2
+          inBounds _ _ = undefined
 
