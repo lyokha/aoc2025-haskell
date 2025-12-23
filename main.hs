@@ -86,5 +86,8 @@ main = do
         input <- readInput11 <$> readFile "input11.txt"
         print input
         print $ aoc11p1 "you" "out" input
-        print $ aoc11p2 "svr" "out" input
+        let svrfft = aoc11p2 "svr" "fft" "out" input
+            fftdac = aoc11p2 "fft" "dac" "out" input
+            dacout = aoc11p2 "dac" "out" "out" input
+        print $ svrfft * fftdac * dacout
 

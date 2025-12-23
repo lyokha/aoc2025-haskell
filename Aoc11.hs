@@ -12,30 +12,29 @@ readInput11 =
     M.fromList . map (maybe undefined (first init) . uncons . words) . lines
 
 aoc11p1 :: String -> String -> Map String [String] -> Integer
-aoc11p1 start end m = go start [start]
-    where go n ps@(p : pso)
+aoc11p1 start end m = go [start]
+    where go ps@(p : pso)
               | p == end = 1
               | p `elem` pso = 0
-              | otherwise = sum $ map (\c -> go c (c : ps)) (m ! n)
-          go _ [] = undefined
+              | otherwise = sum $ map (go . (: ps)) $ m ! p
+          go [] = undefined
 
--- TODO: implement restriction on paths how it's stated in the original task
-aoc11p2 :: String -> String -> Map String [String] -> Integer
-aoc11p2 start end m = runST $ do
+aoc11p2 :: String -> String -> String -> Map String [String] -> Integer
+aoc11p2 start end sentinel m = runST $ do
     memo <- newSTRef M.empty
-    go start [start] memo
-    where go n ps@(p : pso) memo
-              | p == end = return 1
-              | p `elem` pso = return 0
-              | otherwise =
-                  sum <$> mapM (\c -> do
-                                    memoized <- readSTRef memo
-                                    case c `M.lookup` memoized of
-                                        Just c' -> return c'
-                                        Nothing -> do
-                                            nv <- go c (c : ps) memo
-                                            modifySTRef memo $ M.insert c nv
-                                            return nv
-                               ) (m ! n)
-          go _ [] _ = undefined
+    let go ps@(p : pso)
+            | p == end = return 1
+            | p `elem` pso || p == sentinel = return 0
+            | otherwise =
+                sum <$> mapM (\c -> do
+                                  memoized <- readSTRef memo
+                                  case c `M.lookup` memoized of
+                                      Just c' -> return c'
+                                      Nothing -> do
+                                          nv <- go $ c : ps
+                                          modifySTRef memo $ M.insert c nv
+                                          return nv
+                             ) (m ! p)
+        go [] = undefined
+    go [start]
 

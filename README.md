@@ -13,7 +13,7 @@ crafted with Haskell.
 | 8   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 9   | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
 | 10  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
-| 11  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 11  | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 12  | <ul><li>- [ ] </li></ul>    | <ul><li>- [ ] </li></ul>    |
 
 Benchmarks were taken on my *Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz* computer
@@ -65,5 +65,10 @@ $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 8"
 Benchmark 1: aoc2025
   Time (mean ± σ):     315.1 ms ±   5.9 ms    [User: 278.1 ms, System: 32.6 ms]
   Range (min … max):   305.4 ms … 320.4 ms    5 runs
+
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 11"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      10.0 ms ±   0.6 ms    [User: 5.0 ms, System: 4.9 ms]
+  Range (min … max):     9.2 ms …  10.8 ms    5 runs
 ```
 
