@@ -11,7 +11,7 @@ crafted with Haskell.
 | 6   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 7   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 8   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
-| 9   | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 9   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 10  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
 | 11  | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 12  | <ul><li>- [ ] </li></ul>    | <ul><li>- [ ] </li></ul>    |
@@ -65,6 +65,11 @@ $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 8"
 Benchmark 1: aoc2025
   Time (mean ± σ):     315.1 ms ±   5.9 ms    [User: 278.1 ms, System: 32.6 ms]
   Range (min … max):   305.4 ms … 320.4 ms    5 runs
+
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 9"
+Benchmark 1: aoc2025
+  Time (mean ± σ):     280.4 ms ±   5.8 ms    [User: 274.0 ms, System: 3.5 ms]
+  Range (min … max):   270.7 ms … 285.0 ms    5 runs
 
 $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 11"
 Benchmark 1: aoc2025

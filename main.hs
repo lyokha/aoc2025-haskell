@@ -73,9 +73,9 @@ main = do
         input <- readInput09 . lines <$> readFile "input09.txt"
         print input
         print $ aoc09p1 input
-        let bsy = yBounds09 input
-        print bsy
-        print $ aoc09p2 bsy input
+        let bs = contour09 input
+        print bs
+        print $ aoc09p2 bs input
     when (null args || "10" `elem` args) $ do
         input <- readInput10 <$> readFile "input10.txt"
         print input

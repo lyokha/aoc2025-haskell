@@ -1,12 +1,13 @@
-module Aoc09 (readInput09, aoc09p1, yBounds09, aoc09p2) where
+module Aoc09 (readInput09, aoc09p1, contour09, aoc09p2) where
 
 import Data.List
 import Data.Bifunctor
 import Data.Function
 import Data.IntMap qualified as M
-import Data.IntMap ((!))
+import Data.IntMap (IntMap)
 
 type Point = (Int, Int)
+type Range = (Int, Int)
 
 silentTail :: [a] -> [a]
 silentTail = maybe undefined snd . uncons
@@ -42,32 +43,29 @@ aoc09p1 =
           shrink a@[_] = a
           shrink (a : bs) = [a, last bs]
 
-yBounds09 :: [Point] -> M.IntMap [Int]
-yBounds09 ps = foldr update psx psy
-    where psy = build $ sort $ map (\(x, y) -> (y, x)) ps
-          psx = M.fromList $ build $ sort ps
-          build = map pairs . groupBy ((==) `on` fst)
-          pairs vs@((x, _) : _) = (x ,) $ map snd vs
-          pairs [] = undefined
-          update (y, [x1, x2]) =
-              M.mapWithKey (\x ys -> if x < x1 || x > x2
-                                         then ys
-                                         else let ysn = y : ys
-                                              in [minimum ysn, maximum ysn]
-                           )
-          update _ = undefined
+contour09 :: [Point] -> (IntMap Range, IntMap Range)
+contour09 ps =
+    bimap M.fromList M.fromList $
+    foldr (\((ax, ay), (bx, by)) (xs, ys) ->
+              if ax == bx
+                  then ((ax, (min ay by, max ay by)) : xs, ys)
+                  else (xs, (ay, (min ax bx, max ax bx)) : ys)
+          ) ([], []) $ zip ps $ silentTail $ cycle ps
 
--- still gives a wrong answer
-aoc09p2 :: M.IntMap [Int] -> [Point] -> Int
-aoc09p2 bsy =
+aoc09p2 :: (IntMap Range, IntMap Range) -> [Point] -> Int
+aoc09p2 (bsx, bsy) =
     foldr (max . uncurry area) 0
-    . (\ps -> [([a], [b]) | (i, a@(ax, ay)) <- zip [0 :: Int ..] ps
+    . (\ps -> [([a], [b])
+              |(i, a@(ax, ay)) <- zip [0 :: Int ..] ps
               ,b@(bx, by) <- drop i ps
-              ,inBounds by $ bsy ! ax
-              ,inBounds ay $ bsy ! bx
+              ,let msy = (min ay by, max ay by)
+              ,inBounds msy (ax, bx) bsx
+              ,inBounds (ax, bx) msy bsy
               ]
       )
     . sort
-    where inBounds y [y1, y2] = y >= y1 && y <= y2
-          inBounds _ _ = undefined
+    where inBounds (ay, by) (ax, bx) =
+              all ((\(l, h) -> ay >= h || by <= l) . snd)
+              . takeWhile ((< bx) . fst) . dropWhile ((<= ax) . fst)
+              . M.assocs
 
