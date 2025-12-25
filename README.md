@@ -68,8 +68,8 @@ Benchmark 1: aoc2025
 
 $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 9"
 Benchmark 1: aoc2025
-  Time (mean ± σ):     280.4 ms ±   5.8 ms    [User: 274.0 ms, System: 3.5 ms]
-  Range (min … max):   270.7 ms … 285.0 ms    5 runs
+  Time (mean ± σ):     142.2 ms ±   8.4 ms    [User: 138.2 ms, System: 2.9 ms]
+  Range (min … max):   135.5 ms … 153.9 ms    5 runs
 
 $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 11"
 Benchmark 1: aoc2025

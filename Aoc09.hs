@@ -3,8 +3,6 @@ module Aoc09 (readInput09, aoc09p1, contour09, aoc09p2) where
 import Data.List
 import Data.Bifunctor
 import Data.Function
-import Data.IntMap qualified as M
-import Data.IntMap (IntMap)
 
 type Point = (Int, Int)
 type Range = (Int, Int)
@@ -43,29 +41,32 @@ aoc09p1 =
           shrink a@[_] = a
           shrink (a : bs) = [a, last bs]
 
-contour09 :: [Point] -> (IntMap Range, IntMap Range)
+order :: Ord a => a -> a -> (a, a)
+order a b | a < b = (a, b)
+          | otherwise = (b, a)
+
+contour09 :: [Point] -> ([(Int, Range)], [(Int, Range)])
 contour09 ps =
-    bimap M.fromList M.fromList $
+    bimap sort sort $
     foldr (\((ax, ay), (bx, by)) (xs, ys) ->
               if ax == bx
-                  then ((ax, (min ay by, max ay by)) : xs, ys)
-                  else (xs, (ay, (min ax bx, max ax bx)) : ys)
+                  then ((ax, order ay by) : xs, ys)
+                  else (xs, (ay, order ax bx) : ys)
           ) ([], []) $ zip ps $ silentTail $ cycle ps
 
-aoc09p2 :: (IntMap Range, IntMap Range) -> [Point] -> Int
+aoc09p2 :: ([(Int, Range)], [(Int, Range)]) -> [Point] -> Int
 aoc09p2 (bsx, bsy) =
     foldr (max . uncurry area) 0
     . (\ps -> [([a], [b])
               |(i, a@(ax, ay)) <- zip [0 :: Int ..] ps
               ,b@(bx, by) <- drop i ps
-              ,let msy = (min ay by, max ay by)
-              ,inBounds msy (ax, bx) bsx
-              ,inBounds (ax, bx) msy bsy
+              ,let ry = order ay by
+              ,inBounds ry (ax, bx) bsx
+              ,inBounds (ax, bx) ry bsy
               ]
       )
     . sort
     where inBounds (ay, by) (ax, bx) =
               all ((\(l, h) -> ay >= h || by <= l) . snd)
               . takeWhile ((< bx) . fst) . dropWhile ((<= ax) . fst)
-              . M.assocs
 
