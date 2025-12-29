@@ -23,7 +23,7 @@ $ cabal build
 ```
 
 Note that Haskell library *z3 408.2* is compatible with *z3 4.8*, compatibility
-with newer versions is not guaranteed. To turn off building Z3, run
+with newer versions is not guaranteed. To turn off building Z3, build with
 
 ```ShellSession
 $ cabal build -f-z3
