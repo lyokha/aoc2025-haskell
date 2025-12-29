@@ -71,7 +71,7 @@ z3Script final buttons = do
     Sat <- optimizeCheck []
     m <- optimizeGetModel
     o' <- optimizeGetLower o
-    fromJust . uncons . catMaybes <$> mapM (evalInt m) (o' : vars)
+    fromJust . uncons <$> mapM (fmap fromJust . evalInt m) (o' : vars)
     where buttons' = transpose $
               map (foldr ((\v a -> let (h, t) = splitAt v a
                                    in h ++ 1 : silentTail t
