@@ -81,7 +81,9 @@ main = do
         print input
         print $ sum $ map (uncurry aoc10p1 . fst) input
         let input' = map (\((_, bs), jolt) -> (jolt, bs)) input
-        print $ map (uncurry aoc10p2) input'
+        clicks <- mapM (uncurry aoc10p2) input'
+        print clicks
+        print $ sum $ map fst clicks
     when (null args || "11" `elem` args) $ do
         input <- readInput11 <$> readFile "input11.txt"
         print input

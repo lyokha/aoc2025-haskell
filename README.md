@@ -12,9 +12,29 @@ crafted with Haskell.
 | 7   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 8   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 9   | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
-| 10  | <ul><li>- [x] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+| 10  | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 11  | <ul><li>- [x] </li></ul>    | <ul><li>- [x] </li></ul>    |
 | 12  | <ul><li>- [ ] </li></ul>    | <ul><li>- [ ] </li></ul>    |
+
+Build with
+
+```ShellSession
+$ cabal build
+```
+
+Note that Haskell library *z3 408.2* is compatible with *z3 4.8*, compatibility
+with newer versions is not guaranteed. To turn off building Z3, run
+
+```ShellSession
+$ cabal build -f-z3
+```
+
+or create file *cabal.project* with lines
+
+```Cabal Config
+packages: aoc2025-haskell.cabal
+flags: -z3
+```
 
 Benchmarks were taken on my *Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz* computer
 with the original inputs appointed from the Advent of Code.

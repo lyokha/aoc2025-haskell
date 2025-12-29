@@ -1,10 +1,16 @@
+{-# LANGUAGE CPP #-}
+
 module Aoc10 (readInput10, aoc10p1, aoc10p2) where
 
 import Data.Bits
 import Data.Word
 import Data.List
 import Data.Bifunctor
-import Numeric.LinearAlgebra
+
+#ifdef WITH_Z3
+import Data.Maybe
+import Z3.Monad
+#endif
 
 zero :: Word16
 zero = 0
@@ -26,6 +32,10 @@ readInput10 =
                 (read . (++ "]") . ('[' :) . drop 1 . init)
             ) . unsnoc . words
         ) . lines
+#if !MIN_VERSION_base(4,19,0)
+    where unsnoc [] = Nothing
+          unsnoc v = Just (init v, last v)
+#endif
 
 aoc10p1 :: Word16 -> [[Int]] -> Int
 aoc10p1 final buttons = go 0 [zero]
@@ -37,19 +47,48 @@ aoc10p1 final buttons = go 0 [zero]
           clicks lamp = map (.^. lamp) buttons'
           buttons' = map (foldl setBit zero) buttons
 
+#ifdef WITH_Z3
+
 silentTail :: [a] -> [a]
 silentTail = maybe undefined snd . uncons
 
--- yields negative values in some cases
-aoc10p2 :: [Int] -> [[Int]] -> [Int]
-aoc10p2 final buttons =
-    let a = len >< length buttons $
-                concatMap (map $ fromIntegral @Int @Double) $ transpose buttons'
-        b = len >< 1 $ map fromIntegral final
-    in map round $ concat $ toLists $ a <\> b
-    where len = length final
-          buttons' = map (foldr (\v a -> let (h, t) = splitAt v a
-                                         in h ++ 1 : silentTail t
-                                ) $ replicate (length final) 0
-                         ) buttons
+z3Script :: [Integer] -> [[Integer]] -> Z3 (Integer, [Integer])
+z3Script final buttons = do
+    _zero <- mkInteger 0
+    _final <- mapM mkInteger final
+    vars <- mapM (mkFreshIntVar . ('x' :) . show) [1 .. length buttons]
+    constraints <- mapM (mkLe _zero) vars
+    eqs <- mapM (\(i, r) -> do
+                      part <- mkAdd (foldl (\a (b, v) ->
+                                               a ++ [v | b == (1 :: Integer)]
+                                           ) [] $ zip (buttons' !! i) vars
+                                     )
+                      mkEq part r
+                  ) $ zip [0 :: Int ..] _final
+    mapM_ optimizeAssert constraints
+    mapM_ optimizeAssert eqs
+    o <- mkAdd vars >>= optimizeMinimize
+    Sat <- optimizeCheck []
+    m <- optimizeGetModel
+    o' <- optimizeGetLower o
+    o'' <- fromJust <$> evalInt m o'
+    bs <- catMaybes <$> mapM (evalInt m) vars
+    return (o'', bs)
+    where buttons' = transpose $
+              map (foldr ((\v a -> let (h, t) = splitAt v a
+                                   in h ++ 1 : silentTail t
+                          ) . fromIntegral
+                         ) $ replicate (length final) 0
+                  ) buttons
+
+aoc10p2 :: [Int] -> [[Int]] -> IO (Integer, [Integer])
+aoc10p2 final =
+    evalZ3 . z3Script (map fromIntegral final) . map (map fromIntegral)
+
+#else
+
+aoc10p2 :: [Int] -> [[Int]] -> IO (Integer, [Integer])
+aoc10p2 = const $ const $ return (0, [])
+
+#endif
 

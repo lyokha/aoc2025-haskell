@@ -12,13 +12,18 @@ category:                   Education
 build-type:                 Simple
 cabal-version:              1.20
 
+flag Z3
+  description:              Build Z3 bindings.
+
 executable aoc2025
   default-language:         GHC2021
   build-depends:            base >= 4.10 && < 5
                           , containers
                           , array
                           , disjoint-containers
-                          , hmatrix
+  if flag(Z3)
+    build-depends:          z3
+    cpp-options:           -DWITH_Z3
 
   main-is:                  main.hs
   other-modules:            Aoc01 Aoc02 Aoc03 Aoc04 Aoc05 Aoc06
