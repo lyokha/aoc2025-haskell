@@ -42,7 +42,6 @@ with the original inputs appointed from the Advent of Code.
 ```ShellSession
 $ ghc --version
 The Glorious Glasgow Haskell Compilation System, version 9.12.2
-$ cabal build
 ```
 
 ```ShellSession
