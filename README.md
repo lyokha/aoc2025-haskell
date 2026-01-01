@@ -36,6 +36,29 @@ packages: aoc2025-haskell.cabal
 flags: -z3
 ```
 
+In *Fedora 43*, the system-wide Z3 version is
+
+```ShellSession
+$ z3 --version
+Z3 version 4.15.4 - 64 bit
+```
+
+This is not compatible with Haskell library *z3 408.2*, however the library can
+be built from its latest revision on the Github repositiry. To build it this
+way, put lines
+
+```Cabal Config
+packages: aoc2025-haskell.cabal
+-- flags: -z3
+
+source-repository-package
+    type: git
+    location: https://github.com/IagoAbal/haskell-z3
+    tag: b77a17e5eeb7db82656bcbcd66c6e952207e69ca
+```
+
+into file *cabal.project*.
+
 Benchmarks were taken on my *Intel(R) Core(TM) i5-8250U CPU @ 1.60GHz* computer
 with the original inputs appointed from the Advent of Code.
 
@@ -89,6 +112,11 @@ $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 9"
 Benchmark 1: aoc2025
   Time (mean ± σ):     142.2 ms ±   8.4 ms    [User: 138.2 ms, System: 2.9 ms]
   Range (min … max):   135.5 ms … 153.9 ms    5 runs
+
+$ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 10"
+Benchmark 1: aoc2025
+  Time (mean ± σ):      1.189 s ±  0.036 s    [User: 0.797 s, System: 0.376 s]
+  Range (min … max):    1.153 s …  1.240 s    5 runs
 
 $ hyperfine -n aoc2025 -w 2 -r 5 "$(cabal list-bin aoc2025) 11"
 Benchmark 1: aoc2025
