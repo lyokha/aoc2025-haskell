@@ -1,0 +1,4 @@
+set terminal kittycairo scroll size 900, 800
+set datafile separator ','
+plot "input09.txt" with lines
+
